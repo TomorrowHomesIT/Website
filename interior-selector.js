@@ -2,11 +2,11 @@
 (function () {
   var R = window.__resources || {};
   var schemes = [
-    { key: 'moment',    name: 'Moment',    src: R.intMoment    || 'assets/interior-moment.jpg' },
-    { key: 'present',   name: 'Present',   src: R.intPresent   || 'assets/interior-present.jpg' },
-    { key: 'today',     name: 'Today',     src: R.intToday     || 'assets/interior-today.jpg' },
-    { key: 'tomorrow',  name: 'Tomorrow',  src: R.intTomorrow  || 'assets/interior-tomorrow.jpg' },
-    { key: 'yesterday', name: 'Yesterday', src: R.intYesterday || 'assets/interior-yesterday.jpg' }
+    { key: 'moment',    name: 'Moment',    src: R.intMoment    || 'interior-moment.jpg' },
+    { key: 'present',   name: 'Present',   src: R.intPresent   || 'interior-present.jpg' },
+    { key: 'today',     name: 'Today',     src: R.intToday     || 'interior-today.jpg' },
+    { key: 'tomorrow',  name: 'Tomorrow',  src: R.intTomorrow  || 'interior-tomorrow.jpg' },
+    { key: 'yesterday', name: 'Yesterday', src: R.intYesterday || 'interior-yesterday.jpg' }
   ];
   var byKey = {};
   schemes.forEach(function (s) { byKey[s.key] = s; });

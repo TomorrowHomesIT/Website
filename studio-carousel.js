@@ -2,14 +2,14 @@
 (function () {
   var R = window.__resources || {};
   var slides = [
-    { src: R.facadeBrae      || 'assets/facade-brae.jpg',      title: 'Brae' },
-    { src: R.facadeVaucluse  || 'assets/facade-vaucluse.jpg',  title: 'Vaucluse' },
-    { src: R.facadeMainridge || 'assets/facade-mainridge.jpg', title: 'Mainridge' },
-    { src: R.facadeMosman    || 'assets/facade-mosman.jpg',    title: 'Mosman' },
-    { src: R.facadeHamilton  || 'assets/facade-hamilton.jpg',  title: 'Hamilton' },
-    { src: R.facadeToorak    || 'assets/facade-toorak.jpg',    title: 'Toorak' },
-    { src: R.facadePortsea   || 'assets/facade-portsea.jpg',   title: 'Portsea' },
-    { src: R.facadeClaremont || 'assets/facade-claremont.jpg', title: 'Claremont' }
+    { src: R.facadeBrae      || 'facade-brae.jpg',      title: 'Brae' },
+    { src: R.facadeVaucluse  || 'facade-vaucluse.jpg',  title: 'Vaucluse' },
+    { src: R.facadeMainridge || 'facade-mainridge.jpg', title: 'Mainridge' },
+    { src: R.facadeMosman    || 'facade-mosman.jpg',    title: 'Mosman' },
+    { src: R.facadeHamilton  || 'facade-hamilton.jpg',  title: 'Hamilton' },
+    { src: R.facadeToorak    || 'facade-toorak.jpg',    title: 'Toorak' },
+    { src: R.facadePortsea   || 'facade-portsea.jpg',   title: 'Portsea' },
+    { src: R.facadeClaremont || 'facade-claremont.jpg', title: 'Claremont' }
   ];
   var N = slides.length;
 
