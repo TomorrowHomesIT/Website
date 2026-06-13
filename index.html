@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tomorrow Homes — Build for today, and every tomorrow after.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500;600&family=Space+Mono:wght@400&display=swap" rel="stylesheet" />
+
+<!-- JS-string-referenced resources (studio carousel + interior selector) -->
+<meta name="ext-resource-dependency" content="assets/facade-brae.jpg" data-resource-id="facadeBrae" />
+<meta name="ext-resource-dependency" content="assets/facade-vaucluse.jpg" data-resource-id="facadeVaucluse" />
+<meta name="ext-resource-dependency" content="assets/facade-mainridge.jpg" data-resource-id="facadeMainridge" />
+<meta name="ext-resource-dependency" content="assets/facade-mosman.jpg" data-resource-id="facadeMosman" />
+<meta name="ext-resource-dependency" content="assets/facade-hamilton.jpg" data-resource-id="facadeHamilton" />
+<meta name="ext-resource-dependency" content="assets/facade-toorak.jpg" data-resource-id="facadeToorak" />
+<meta name="ext-resource-dependency" content="assets/facade-portsea.jpg" data-resource-id="facadePortsea" />
+<meta name="ext-resource-dependency" content="assets/facade-claremont.jpg" data-resource-id="facadeClaremont" />
+<meta name="ext-resource-dependency" content="assets/interior-moment.jpg" data-resource-id="intMoment" />
+<meta name="ext-resource-dependency" content="assets/interior-present.jpg" data-resource-id="intPresent" />
+<meta name="ext-resource-dependency" content="assets/interior-today.jpg" data-resource-id="intToday" />
+<meta name="ext-resource-dependency" content="assets/interior-tomorrow.jpg" data-resource-id="intTomorrow" />
+<meta name="ext-resource-dependency" content="assets/interior-yesterday.jpg" data-resource-id="intYesterday" />
+
+<template id="__bundler_thumbnail" data-bg-color="#11100e">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#11100e"/>
+    <text x="600" y="430" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="190" font-weight="500" letter-spacing="-4" fill="#f5f3f0">Tomorrow</text>
+  </svg>
+</template>
+<style>
+  :root {
+    --paper: #F5F3F0;
+    --ink: #101820;
+    --grey: #737373;
+    --sage: #7D7F79;
+    --steel: #5E7A8D;
+    --line: rgba(16, 24, 32, 0.14);
+    --nav-h: 76px;
+    --serif: "Cormorant Garamond", Georgia, serif;
+    --sans: "Jost", system-ui, sans-serif;
+    --mono: "Space Mono", monospace;
+    --pad: clamp(24px, 6vw, 120px);
+    --wm-pad: 0px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: var(--nav-h);
+  }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  img { display: block; max-width: 100%; }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ---------- shared type ---------- */
+  .eyebrow {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--sage);
+  }
+
+  .rule {
+    width: 100%;
+    height: 1px;
+    background: var(--line);
+    border: 0;
+  }
+
+  .display {
+    font-family: var(--serif);
+    font-weight: 400;
+    line-height: 1.04;
+    letter-spacing: -0.01em;
+  }
+
+  p.body {
+    font-size: clamp(15px, 1.05vw, 17px);
+    color: var(--ink);
+    font-weight: 300;
+    max-width: 46ch;
+  }
+  p.body.muted { color: var(--grey); }
+
+  /* ---------- buttons ---------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--sans);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 13px 22px;
+    border-radius: 1px;
+    border: 1px solid var(--ink);
+    transition: background .4s ease, color .4s ease, border-color .4s ease;
+    cursor: pointer;
+    background: transparent;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .btn--solid { background: var(--ink); color: var(--paper); }
+  .btn--solid:hover { background: var(--steel); border-color: var(--steel); }
+  .btn--outline:hover { background: var(--ink); color: var(--paper); }
+
+  /* arrow text-link */
+  .arrow-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--line);
+    transition: color .35s ease, border-color .35s ease, gap .35s ease;
+  }
+  .arrow-link .arr { transition: transform .35s ease; }
+  .arrow-link:hover { color: var(--steel); border-color: var(--steel); gap: 14px; }
+
+  /* ---------- placeholders ---------- */
+  .ph {
+    position: relative;
+    background:
+      repeating-linear-gradient(135deg,
+        #ece8e2 0px, #ece8e2 11px,
+        #e5e0d9 11px, #e5e0d9 22px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .ph::after {
+    content: "";
+    position: absolute;
+    inset: 14px;
+    border: 1px solid rgba(16,24,32,0.10);
+    pointer-events: none;
+  }
+  .ph__label {
+    position: relative;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #9b948a;
+    background: var(--paper);
+    padding: 7px 13px;
+    z-index: 1;
+  }
+
+  /* video placeholder (dark) */
+  .video-ph {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: var(--ink);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 26px;
+    cursor: pointer;
+    overflow: hidden;
+  }
+  .video-ph::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(135deg,
+        rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 12px,
+        transparent 12px, transparent 24px);
+  }
+  .play {
+    position: relative;
+    z-index: 2;
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    border: 1px solid rgba(16,24,32,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform .5s ease, border-color .5s ease, background .5s ease;
+  }
+  .play svg { margin-left: 4px; }
+  .video-ph:hover .play { transform: scale(1.07); border-color: var(--ink); background: rgba(16,24,32,0.05); }
+  .video-ph__center {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(22px, 2.6vw, 32px);
+    text-align: center;
+    padding: 0 24px;
+  }
+  .video-ph__title {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(30px, 3.7vw, 54px);
+    line-height: 1.04;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+  }
+  .video-ph__meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 13px;
+    font-family: var(--sans);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: rgba(16,24,32,0.78);
+  }
+  .video-ph__meta::before {
+    content: "";
+    width: 30px;
+    height: 1px;
+    background: rgba(16,24,32,0.5);
+  }
+  .video-ph__tag {
+    position: absolute;
+    top: clamp(22px, 3vw, 40px);
+    left: clamp(24px, 6vw, 120px);
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: rgba(16,24,32,0.62);
+  }
+  .video-ph__tag::before {
+    content: "";
+    width: 36px;
+    height: 1px;
+    background: rgba(16,24,32,0.4);
+  }
+  .video-ph__cover {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+  }
+  .video-ph--cover::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(to bottom, rgba(245,243,240,0.62) 0%, rgba(245,243,240,0.50) 50%, rgba(245,243,240,0.46) 100%);
+  }
+
+  /* ---------- reveal ---------- */
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity 1.1s cubic-bezier(.2,.7,.2,1), transform 1.1s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity: 1; transform: none; }
+  .reveal[data-d="1"] { transition-delay: .12s; }
+  .reveal[data-d="2"] { transition-delay: .24s; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+  }
+
+  /* ============ NAV ============ */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: var(--nav-h);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--pad);
+    background: transparent;
+    transition: background .45s ease, box-shadow .45s ease;
+  }
+  /* Theme-aware bar — set by JS from the data-theme of the section behind it */
+  .nav.theme-light {
+    background: rgba(245,243,240,0.86);
+    backdrop-filter: saturate(1.1) blur(14px);
+    -webkit-backdrop-filter: saturate(1.1) blur(14px);
+    box-shadow: 0 1px 0 var(--line);
+  }
+  .nav.theme-dark {
+    background: rgba(16,24,32,0.30);
+    backdrop-filter: saturate(1.05) blur(12px);
+    -webkit-backdrop-filter: saturate(1.05) blur(12px);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.06);
+  }
+  /* Logo: full Tomorrow + Homes lockup. The TOMORROW band (top 64.24%) is the dock target. */
+  .nav__logo { position: relative; display: block; width: 157px; aspect-ratio: 1602 / 302; }
+  .nav__logo img { position: absolute; top: 0; left: 0; width: 100%; height: auto; transition: opacity .4s ease; }
+  .nav__logo .logo-w { opacity: 0; }
+  .nav__logo .logo-b { opacity: 1; }
+  .nav.theme-dark .nav__logo .logo-w { opacity: 1; }
+  .nav.theme-dark .nav__logo .logo-b { opacity: 0; }
+  .nav__logo-mark { position: absolute; top: 0; left: 0; width: 100%; height: 64.24%; pointer-events: none; }
+  .nav__right { display: flex; align-items: center; gap: clamp(20px, 2.6vw, 44px); }
+  .nav__links { display: flex; align-items: center; gap: clamp(20px, 2.6vw, 40px); }
+  .nav__links a {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(16,24,32,0.82);
+    position: relative;
+    padding: 4px 0;
+    white-space: nowrap;
+    transition: color .35s ease;
+  }
+  .nav.theme-dark .nav__links a { color: rgba(245,243,240,0.9); }
+  .nav__links a::after {
+    content: "";
+    position: absolute;
+    left: 0; bottom: 0;
+    width: 0; height: 1px;
+    background: var(--steel);
+    transition: width .4s ease;
+  }
+  .nav__links a:hover { color: var(--steel); }
+  .nav.theme-dark .nav__links a:hover { color: #aebfca; }
+  .nav__links a:hover::after { width: 100%; }
+  .nav__cta {
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--paper);
+    background: var(--ink);
+    padding: 11px 20px;
+    border-radius: 1px;
+    white-space: nowrap;
+    transition: background .4s ease, color .4s ease;
+  }
+  .nav.theme-dark .nav__cta { color: var(--ink); background: var(--paper); }
+  .nav__cta:hover { background: var(--steel); color: var(--paper); }
+
+  /* Intro mode: nav stays hidden until the wordmark docks (JS-driven). */
+  html.js-intro .nav { opacity: 0; pointer-events: none; }
+
+  /* ============ SECTION 0 — SPLASH ============ */
+  .s0 {
+    position: relative;
+    z-index: 1;
+    height: 100svh;
+    overflow: hidden;
+    background: var(--ink);
+  }
+  .s0__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 50%;
+  }
+  .s0__scrim {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to top, rgba(16,24,32,0.62) 0%, rgba(16,24,32,0.20) 32%, rgba(16,24,32,0.10) 60%, rgba(16,24,32,0.30) 100%);
+  }
+  .s0__mark {
+    position: absolute;
+    left: var(--wm-pad);
+    bottom: 0;
+    width: calc(100vw - 2 * var(--wm-pad));
+    height: auto;
+  }
+  html.js-intro .s0__mark { visibility: hidden; }
+  .s0__hint {
+    position: absolute;
+    left: 50%;
+    bottom: 26px;
+    transform: translateX(-50%);
+    font-family: var(--sans);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(245,243,240,0.78);
+    z-index: 3;
+    animation: s0hint 2.4s ease-in-out infinite;
+  }
+  @keyframes s0hint { 0%,100% { transform: translate(-50%, 0); opacity: .55; } 50% { transform: translate(-50%, 6px); opacity: 1; } }
+
+  /* The two stacked giant wordmark copies (fixed; driven by JS) */
+  #wm-white, #wm-black {
+    position: fixed;
+    left: var(--wm-pad);
+    bottom: 0;
+    width: calc(100vw - 2 * var(--wm-pad));
+    transform-origin: 0 0;
+    pointer-events: none;
+    opacity: 0;
+    will-change: transform, opacity, clip-path;
+  }
+  #wm-white { z-index: 5; }
+  #wm-black { z-index: 20; clip-path: inset(100% 0 0 0); }
+  #wm-white img, #wm-black img { width: 100%; height: auto; display: block; }
+
+  /* The page slab that rises over the wordmark — solid off-white, sits between the two copies */
+  #page { position: relative; z-index: 10; background: var(--paper); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .s0__hint { animation: none; }
+  }
+
+  /* ============ HERO ============ */
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    align-items: flex-start;
+    color: var(--ink);
+    overflow: hidden;
+    background: var(--paper);
+  }
+  .hero__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 38%;
+  }
+  video.hero__img { object-position: center 50%; }
+  .hero__scrim {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to top, rgba(245,243,240,0.90) 0%, rgba(245,243,240,0.58) 30%, rgba(245,243,240,0.18) 58%, rgba(245,243,240,0.34) 100%),
+      linear-gradient(to right, rgba(245,243,240,0.60) 0%, rgba(245,243,240,0.14) 48%, rgba(245,243,240,0) 72%);
+  }
+  .hero__inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding: var(--pad);
+    padding-top: calc(50svh + 150px);
+    padding-bottom: clamp(80px, 14vh, 160px);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  .hero__manifesto {
+    font-size: clamp(34px, 6.4vw, 96px);
+    line-height: 1.0;
+    max-width: none;
+  }
+  .hero__line { display: block; white-space: nowrap; }
+  .hero__manifesto em { font-style: italic; color: rgba(16,24,32,0.72); }
+  .hero__statement {
+    font-family: var(--sans);
+    font-weight: 300;
+    font-size: clamp(15px, 1.25vw, 19px);
+    line-height: 1.62;
+    max-width: 60ch;
+    color: rgba(16,24,32,0.82);
+    border-top: 1px solid rgba(16,24,32,0.20);
+    padding-top: 24px;
+  }
+  .hero__statement b { font-weight: 400; color: var(--ink); }
+  .hero__eyebrow { color: var(--sage); }
+
+  /* ============ generic section ============ */
+  section { position: relative; }
+  .wrap { max-width: 1340px; margin: 0 auto; padding-left: var(--pad); padding-right: var(--pad); }
+  .section-pad { padding-top: clamp(96px, 13vw, 200px); padding-bottom: clamp(96px, 13vw, 200px); }
+
+  .sec-head {
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    margin-bottom: clamp(48px, 6vw, 88px);
+  }
+  .sec-head .eyebrow { white-space: nowrap; }
+  .sec-head .rule { flex: 1; }
+
+  /* ---- The Difference (3 cols) ---- */
+  .difference__intro {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(28px, 3.4vw, 46px);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    max-width: none;
+    margin-bottom: clamp(56px, 7vw, 100px);
+  }
+  .difference__intro span { display: block; }
+  .cols3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(36px, 5vw, 88px);
+  }
+  .col h3 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(22px, 1.9vw, 29px);
+    line-height: 1.14;
+    margin-bottom: 22px;
+    padding-top: 22px;
+    border-top: 1px solid var(--ink);
+  }
+  .col .num {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--steel);
+    display: block;
+    margin-bottom: 18px;
+  }
+  .col p { font-size: 15px; color: var(--grey); font-weight: 300; }
+
+  /* ---- full-bleed video sections ---- */
+  .video-section { width: 100%; }
+  .video-ph[data-youtube] { cursor: pointer; }
+  .video-ph[data-youtube]:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+
+  /* ---- video lightbox ---- */
+  .vlb {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(16px, 4vw, 56px);
+    background: rgba(8, 12, 16, 0.92);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.32s ease, visibility 0.32s ease;
+  }
+  .vlb.open { opacity: 1; visibility: visible; }
+  .vlb__frame {
+    width: 100%;
+    max-width: 1120px;
+    transform: scale(0.97);
+    transition: transform 0.32s ease;
+  }
+  .vlb.open .vlb__frame { transform: scale(1); }
+  .vlb__ratio {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    overflow: hidden;
+    box-shadow: 0 40px 120px rgba(0,0,0,0.55);
+  }
+  .vlb__ratio iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  .vlb__close {
+    position: absolute;
+    top: clamp(16px, 3vw, 32px);
+    right: clamp(16px, 3vw, 32px);
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.4);
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+  .vlb__close:hover { background: rgba(255,255,255,0.12); border-color: #fff; }
+
+  /* ---- Testimonial ticker ---- */
+  .ticker {
+    background: var(--ink);
+    color: var(--paper);
+    padding: clamp(64px, 8vw, 110px) 0;
+    overflow: hidden;
+  }
+  .ticker__eyebrow {
+    color: rgba(245,243,240,0.5);
+    text-align: center;
+    margin-bottom: clamp(40px, 5vw, 64px);
+  }
+  .ticker__viewport { overflow: hidden; width: 100%; -webkit-mask-image: linear-gradient(to right, transparent, #000 9%, #000 91%, transparent); mask-image: linear-gradient(to right, transparent, #000 9%, #000 91%, transparent); }
+  .ticker__track { display: inline-flex; white-space: nowrap; animation: ticker-scroll 75s linear infinite; will-change: transform; }
+  .ticker:hover .ticker__track { animation-duration: 900s; }
+  @keyframes ticker-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .ticker__group { display: inline-flex; align-items: stretch; }
+  .quote {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    width: clamp(300px, 26vw, 360px);
+    white-space: normal;
+    padding: 0 clamp(34px, 3.6vw, 56px);
+    border-right: 1px solid rgba(245,243,240,0.12);
+    vertical-align: top;
+  }
+  .quote__head { display: flex; align-items: center; gap: 12px; }
+  .quote__g { width: 19px; height: 19px; display: block; flex-shrink: 0; }
+  .quote__stars { color: var(--steel); font-size: 13px; letter-spacing: 3px; line-height: 1; }
+  .quote__name {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--paper);
+  }
+  .quote__text {
+    font-family: var(--serif);
+    font-style: normal;
+    font-weight: 400;
+    font-size: clamp(18px, 1.4vw, 22px);
+    line-height: 1.38;
+    color: rgba(245,243,240,0.74);
+    letter-spacing: 0.005em;
+    text-wrap: pretty;
+  }
+
+  /* ---- The Build (two col) ---- */
+  .split {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: clamp(40px, 6vw, 110px);
+    align-items: center;
+  }
+  .split__media .ph { width: 100%; aspect-ratio: 4 / 5; }
+  .split__body h2 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(34px, 4.6vw, 64px);
+    line-height: 1.04;
+    letter-spacing: -0.015em;
+    margin-bottom: 30px;
+  }
+  .split__body .eyebrow { display: block; margin-bottom: 26px; }
+  .btn-row { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 40px; }
+
+  /* ---- The Studio (asymmetric) ---- */
+  .studio__head { max-width: 50ch; margin-bottom: clamp(56px, 7vw, 96px); }
+  .studio__head h2 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(34px, 4.6vw, 64px);
+    line-height: 1.04;
+    letter-spacing: -0.015em;
+    margin: 26px 0 30px;
+  }
+  .studio__grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 0;
+    align-items: end;
+  }
+  .studio__img-a { grid-column: 1 / 8; }
+  .studio__img-a .ph { aspect-ratio: 16 / 11; }
+  .studio__img-b { grid-column: 7 / 13; margin-bottom: clamp(-120px, -7vw, -56px); margin-left: clamp(-40px, -4vw, -20px); position: relative; z-index: 2; }
+  .studio__img-b .ph { aspect-ratio: 3 / 4; box-shadow: 0 30px 70px -30px rgba(16,24,32,0.45); }
+  .studio__caption { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--grey); margin-top: 16px; }
+
+  /* ---- Studio facade carousel ---- */
+  .facade-carousel { margin-top: clamp(40px, 5vw, 66px); }
+  .fc-stage {
+    position: relative;
+    display: grid;
+    grid-template-columns: 0.12fr 1fr 0.12fr;
+    gap: clamp(10px, 1.1vw, 16px);
+    align-items: stretch;
+  }
+  .fc-panel { position: relative; overflow: hidden; background: #e8e4df; }
+  .fc-panel img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .fc-panel--side { opacity: 0.5; filter: saturate(0.92) brightness(0.96); transition: opacity .6s ease; }
+  .fc-panel--side img { transition: opacity .5s ease; }
+  .fc-panel--focal { aspect-ratio: 16 / 10; cursor: zoom-in; box-shadow: 0 36px 80px -40px rgba(16,24,32,0.5); }
+  .fc-layer { position: absolute; inset: 0; opacity: 0; transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1); }
+  .fc-layer.is-active { opacity: 1; }
+  .fc-arrow {
+    position: absolute; top: 50%; transform: translateY(-50%); z-index: 6;
+    width: clamp(42px, 3.2vw, 54px); height: clamp(42px, 3.2vw, 54px);
+    border-radius: 50%; border: 1px solid rgba(245,243,240,0.7);
+    background: rgba(245,243,240,0.78); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--ink);
+    transition: background .35s ease, color .35s ease, transform .35s ease;
+  }
+  .fc-arrow:hover { background: var(--ink); color: var(--paper); transform: translateY(-50%) scale(1.06); }
+  .fc-arrow--prev { left: max(8px, calc(6% - 26px)); }
+  .fc-arrow--next { right: max(8px, calc(6% - 26px)); }
+  .fc-expand {
+    position: absolute; top: 16px; right: 16px; z-index: 6;
+    width: 42px; height: 42px; border-radius: 50%;
+    border: 1px solid rgba(245,243,240,0.6); background: rgba(16,24,32,0.34); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--paper);
+    transition: background .35s ease; opacity: 0; transition: opacity .4s ease, background .35s ease;
+  }
+  .fc-panel--focal:hover .fc-expand { opacity: 1; }
+  .fc-expand:hover { background: rgba(16,24,32,0.62); }
+  .fc-caption-row { display: flex; align-items: baseline; gap: 18px; margin-top: 24px; }
+  .fc-index { font-family: var(--mono); font-size: 12px; letter-spacing: 0.18em; color: var(--steel); white-space: nowrap; }
+  .fc-title { font-family: var(--serif); font-style: italic; font-size: clamp(18px, 1.6vw, 25px); color: var(--ink); }
+  .fc-caption-row .rule { flex: 1; align-self: center; }
+  .fc-thumbs {
+    margin-top: clamp(20px, 2.2vw, 30px);
+    overflow-x: auto; overflow-y: hidden;
+    cursor: grab; touch-action: pan-x;
+    scrollbar-width: none; -ms-overflow-style: none;
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent);
+  }
+  .fc-thumbs::-webkit-scrollbar { display: none; }
+  .fc-thumbs.dragging { cursor: grabbing; }
+  .fc-thumbs-track { display: flex; gap: 14px; width: max-content; user-select: none; }
+  .fc-thumb {
+    flex: 0 0 auto; width: clamp(118px, 11.5vw, 166px); aspect-ratio: 16 / 10;
+    position: relative; overflow: hidden; opacity: 0.55; transition: opacity .4s ease;
+  }
+  .fc-thumb img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; -webkit-user-drag: none; }
+  .fc-thumb::after { content: ""; position: absolute; inset: 0; box-shadow: inset 0 0 0 0 var(--ink); transition: box-shadow .4s ease; background: rgba(16,24,32,0.10); }
+  .fc-thumb.is-active { opacity: 1; }
+  .fc-thumb.is-active::after { box-shadow: inset 0 0 0 2px var(--ink); background: rgba(16,24,32,0); }
+
+  /* lightbox */
+  .fc-lightbox {
+    position: fixed; inset: 0; z-index: 1000; background: rgba(16,24,32,0.97);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity .45s ease;
+  }
+  .fc-lightbox.is-open { opacity: 1; pointer-events: auto; }
+  .fc-lb-stage { position: relative; width: 100%; height: 100%; overflow: hidden; touch-action: none; display: flex; align-items: center; justify-content: center; }
+  .fc-lb-img { max-width: 88vw; max-height: 82vh; object-fit: contain; transform-origin: center center; will-change: transform; user-select: none; -webkit-user-drag: none; cursor: grab; }
+  .fc-lb-img.is-grabbing { cursor: grabbing; }
+  .fc-lb-close, .fc-lb-arrow {
+    position: absolute; z-index: 5; border: 1px solid rgba(245,243,240,0.32); background: transparent;
+    color: rgba(245,243,240,0.9); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: background .35s ease, border-color .35s ease;
+  }
+  .fc-lb-close:hover, .fc-lb-arrow:hover { background: rgba(245,243,240,0.1); border-color: rgba(245,243,240,0.7); }
+  .fc-lb-close { top: 24px; right: 28px; width: 46px; height: 46px; font-size: 22px; line-height: 1; }
+  .fc-lb-arrow { top: 50%; transform: translateY(-50%); width: 52px; height: 52px; }
+  .fc-lb-arrow--prev { left: 28px; }
+  .fc-lb-arrow--next { right: 28px; }
+  .fc-lb-meta {
+    position: absolute; bottom: 28px; left: 0; right: 0; text-align: center;
+    font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(245,243,240,0.6);
+    display: flex; flex-direction: column; gap: 8px; pointer-events: none;
+  }
+  .fc-lb-meta .fc-lb-hint { font-size: 10px; letter-spacing: 0.3em; color: rgba(245,243,240,0.35); }
+
+  /* ---- Selector titles (facade + interior) ---- */
+  .selector-head { margin-bottom: clamp(28px, 3.4vw, 46px); }
+  .selector-head .eyebrow { display: block; margin-bottom: 13px; }
+  .selector-head h3 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(23px, 2.5vw, 33px);
+    line-height: 1.06;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .selector-head p { font-size: 15px; color: var(--grey); font-weight: 300; max-width: 46ch; margin-top: 14px; }
+  .facade-carousel { margin-top: 0; }
+  .interior-selector { margin-top: clamp(80px, 10vw, 150px); }
+
+  /* ---- Interior selector (dark sidebar + hero) ---- */
+  /* simple scheme buttons + large image */
+  .int-btns { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: clamp(24px, 2.6vw, 38px); }
+  .int-btn {
+    font-family: var(--sans); font-size: 11.5px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase;
+    padding: 13px 26px; border-radius: 1px; border: 1px solid var(--ink); background: transparent; color: var(--ink);
+    cursor: pointer; transition: background .35s ease, color .35s ease, border-color .35s ease; white-space: nowrap;
+  }
+  .int-btn:hover { background: rgba(16,24,32,0.06); }
+  .int-btn.is-active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .int-btn.is-active:hover { background: var(--ink); }
+  .int-view { position: relative; width: 100%; aspect-ratio: 1700 / 1175; overflow: hidden; background: #e8e4df; box-shadow: 0 38px 84px -44px rgba(16,24,32,0.5); }
+  .int-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .55s ease; }
+  .int-img.is-active { opacity: 1; }
+  .int-view__cap { position: absolute; left: clamp(16px,1.6vw,24px); bottom: clamp(14px,1.4vw,20px); z-index: 2; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--paper); text-shadow: 0 1px 12px rgba(16,24,32,0.55); }
+
+  /* ---- Developments ---- */
+  .dev__intro {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(24px, 2.7vw, 38px);
+    line-height: 1.18;
+    letter-spacing: -0.01em;
+    max-width: none;
+    text-wrap: balance;
+    margin-bottom: clamp(52px, 6vw, 88px);
+  }
+  .dev__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(28px, 3.4vw, 56px) clamp(28px, 3.4vw, 56px);
+  }
+  .dev-card { display: block; }
+  .dev-card .ph { width: 100%; aspect-ratio: 3 / 2; transition: transform 1.2s cubic-bezier(.2,.7,.2,1); }
+  .dev-card__img { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; filter: saturate(0.8); transition: transform 1.2s cubic-bezier(.2,.7,.2,1); }
+  .dev-card:hover .dev-card__img { transform: scale(1.035); }
+  .dev-card__media { overflow: hidden; }
+  .dev-card:hover .ph { transform: scale(1.035); }
+  .dev-card__foot {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 20px;
+    padding-top: 22px;
+    border-top: 1px solid var(--ink);
+    margin-top: 22px;
+  }
+  .dev-card__name { font-family: var(--serif); font-weight: 500; font-size: clamp(24px, 2.4vw, 34px); letter-spacing: -0.01em; }
+  .dev-card .arrow-link { border-bottom: none; padding-bottom: 0; }
+
+  /* ---- Footer ---- */
+  .footer {
+    background: var(--ink);
+    color: var(--paper);
+    padding: clamp(72px, 9vw, 130px) 0 44px;
+  }
+  .footer__top {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: clamp(40px, 6vw, 90px);
+    align-items: start;
+    padding-bottom: clamp(56px, 7vw, 90px);
+    border-bottom: 1px solid rgba(245,243,240,0.14);
+  }
+  .footer__logo img { height: 34px; width: auto; margin-bottom: 30px; }
+  .footer__tag { font-family: var(--serif); font-style: italic; font-size: clamp(20px, 2vw, 28px); color: rgba(245,243,240,0.8); max-width: 22ch; line-height: 1.2; }
+  .footer__contact { display: flex; flex-direction: column; gap: 8px; }
+  .footer__contact .lbl { font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(245,243,240,0.45); margin-bottom: 12px; }
+  .footer__contact a, .footer__contact span { font-family: var(--sans); font-weight: 300; font-size: 15px; color: rgba(245,243,240,0.86); transition: color .35s ease; }
+  .footer__contact a:hover { color: var(--steel); }
+  .footer__rating { display: flex; align-items: center; gap: 12px; margin-top: 26px; }
+  .footer__rating .stars { color: var(--steel); letter-spacing: 2px; font-size: 13px; }
+  .footer__rating .rtxt { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(245,243,240,0.7); }
+  .footer__social { display: flex; gap: 14px; margin-top: 28px; }
+  .footer__social a {
+    width: 40px; height: 40px;
+    border: 1px solid rgba(245,243,240,0.22);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .35s ease, border-color .35s ease;
+  }
+  .footer__social a:hover { background: rgba(245,243,240,0.07); border-color: rgba(245,243,240,0.5); }
+  .footer__social svg { fill: rgba(245,243,240,0.8); }
+  .footer__legal {
+    display: flex; flex-wrap: wrap; gap: 8px 26px;
+    padding-top: 36px;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: rgba(245,243,240,0.5);
+  }
+  .footer__legal a { transition: color .35s ease; }
+  .footer__legal a:hover { color: rgba(245,243,240,0.85); }
+  .footer__legal .copy { margin-left: auto; }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 1000px) {
+    .cols3 { grid-template-columns: 1fr; gap: 0; }
+    .col h3 { margin-top: 40px; }
+    .col:first-child h3 { margin-top: 0; }
+    .split { grid-template-columns: 1fr; }
+    .split__media .ph { aspect-ratio: 16/11; }
+    .studio__grid { display: block; }
+    .studio__img-b { margin: -40px 0 0 auto; width: 78%; }
+    .footer__top { grid-template-columns: 1fr; }
+    .fc-stage { grid-template-columns: 1fr; }
+    .fc-panel--side { display: none; }
+    .fc-arrow--prev { left: 10px; }
+    .fc-arrow--next { right: 10px; }
+    .fc-expand { opacity: 1; }
+  }
+  @media (max-width: 720px) {
+    .nav__links { display: none; }
+    .dev__grid { grid-template-columns: 1fr; }
+    .footer__legal .copy { margin-left: 0; width: 100%; }
+    .hero__manifesto { font-size: clamp(34px, 9.5vw, 60px); }
+    .hero__line { white-space: normal; }
+  }
+</style>
+<script>(function(){try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('js-intro');}}catch(e){}})();</script>
+</head>
+<body>
+
+  <!-- ============ NAV ============ -->
+  <header class="nav" id="nav">
+    <a class="nav__logo" href="#top" aria-label="Tomorrow Homes home">
+      <img class="logo-w" src="assets/logo-white.png" alt="Tomorrow Homes" />
+      <img class="logo-b" src="assets/logo-black.png" alt="" aria-hidden="true" />
+      <span class="nav__logo-mark" aria-hidden="true"></span>
+    </a>
+    <div class="nav__right">
+      <nav class="nav__links">
+        <a href="#about">About</a>
+        <a href="#the-build">The Build</a>
+        <a href="#the-studio">The Studio</a>
+        <a href="#developments">Developments</a>
+      </nav>
+      <a class="nav__cta" href="#">CLIENT PORTAL</a>
+    </div>
+  </header>
+
+  <!-- ============ SECTION 0 — SCROLL SPLASH ============ -->
+  <section class="s0" data-theme="dark" aria-label="Tomorrow Homes">
+    <video class="s0__video" autoplay loop muted playsinline>
+      <source src="assets/hero-timelapse.mp4" type="video/mp4" />
+    </video>
+    <div class="s0__scrim"></div>
+    <img class="s0__mark" src="assets/wordmark-white.png" alt="Tomorrow" />
+  </section>
+
+  <!-- Giant wordmark — two pixel-aligned fixed copies driven by landing-intro.js -->
+  <div id="wm-white" aria-hidden="true"><img src="assets/wordmark-white.png" alt="" /></div>
+  <div id="wm-black" aria-hidden="true"><img src="assets/wordmark-black.png" alt="" /></div>
+
+  <div id="page">
+  <span id="top"></span>
+
+  <!-- ============ HERO (Section 1 — solid off-white) ============ -->
+  <section class="hero" data-theme="light">
+    <div class="hero__inner wrap" style="max-width:none;">
+      <span class="eyebrow hero__eyebrow"><span style="color:#000000;">Residential construction — Victoria</span></span>
+      <h1 class="display hero__manifesto"><span class="hero__line">Build for today,</span><span class="hero__line">and <em>every</em> tomorrow after.</span></h1>
+      <p class="hero__statement">Tomorrow Homes is an end-to-end residential construction company. We design and build award-winning homes across Victoria, with long-term investment value built in from day one.</p>
+    </div>
+  </section>
+
+  <!-- ============ BRAND INTRO VIDEO ============ -->
+  <section class="video-section" data-theme="dark" aria-label="Brand introduction video">
+    <div class="video-ph video-ph--cover" role="button" tabindex="0" data-youtube="JhryhnXxapA" aria-label="Play brand introduction video">
+      <img class="video-ph__cover" src="assets/brand-intro-cover.jpg" alt="Inside a Tomorrow home — smart-home demonstration" />
+      <span class="video-ph__tag">
+</span>
+      <div class="video-ph__center">
+        <span class="play">
+          <svg width="22" height="26" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 12.134c.667.385.667 1.347 0 1.732L2.25 24.69c-.667.385-1.5-.096-1.5-.866V2.176c0-.77.833-1.251 1.5-.866L21 12.134Z" fill="#101820"/></svg>
+        </span>
+        <h2 class="video-ph__title">Brand introduction</h2>
+        <span class="video-ph__meta">Watch the film · 2 min</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ THE TOMORROW DIFFERENCE (About) ============ -->
+  <section id="about" class="section-pad" data-theme="light">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">The Tomorrow Difference</span>
+        <hr class="rule" />
+      </div>
+      <p class="difference__intro display reveal"><span>A build that makes sense</span><span>long after handover.</span></p>
+      <div class="cols3">
+        <div class="col reveal">
+          <span class="num">01</span>
+          <h3>Tomorrow, built-in</h3>
+          <p>Unlike most builders, every Tomorrow Home comes with future-ready features by design. A home built today should still make practical and financial sense tomorrow.</p>
+        </div>
+        <div class="col reveal" data-d="1">
+          <span class="num">02</span>
+          <h3>Consistency, from corner to crevice</h3>
+          <p>80+ years experience. Over $4BN in homes delivered. Three-stage independent inspections on every home.</p>
+        </div>
+        <div class="col reveal" data-d="2">
+          <span class="num">03</span>
+          <h3>Design-led,<br>from door to detail</h3>
+          <p>Having an in-house design studio means our homes evolve with compliance changes as they happen — protecting your investment from day one.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HOME WALKTHROUGH VIDEO ============ -->
+  <section class="video-section" data-theme="dark" aria-label="Home walkthrough video">
+    <div class="video-ph video-ph--cover" role="button" tabindex="0" data-youtube="99LFfTp2X38" aria-label="Play home walkthrough video">
+      <img class="video-ph__cover" src="assets/home-walkthrough-cover.jpg" alt="Tomorrow home walkthrough — entry hallway" />
+      <span class="video-ph__tag">
+</span>
+      <div class="video-ph__center">
+        <span class="play">
+          <svg width="22" height="26" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 12.134c.667.385.667 1.347 0 1.732L2.25 24.69c-.667.385-1.5-.096-1.5-.866V2.176c0-.77.833-1.251 1.5-.866L21 12.134Z" fill="#101820"/></svg>
+        </span>
+        <h2 class="video-ph__title">Home walkthrough</h2>
+        <span class="video-ph__meta">Watch the film · 2 min</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TESTIMONIAL TICKER ============ -->
+  <section class="ticker" data-theme="light" aria-label="Client testimonials">
+    <p class="eyebrow ticker__eyebrow">IN THE WORDS OF TOMORROW CUSTOMERS</p>
+    <div class="ticker__viewport">
+      <div class="ticker__track" id="tickerTrack">
+        <div class="ticker__group" id="tickerGroup">
+          <div class="quote"><div class="quote__head"><svg class="quote__g" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span class="quote__stars">★★★★★</span></div><span class="quote__name">Stevie&nbsp;J</span><span class="quote__text">I couldn't be happier with the experience. The quality of the build, attention to detail and craftsmanship truly shine through in every aspect.</span></div>
+          <div class="quote"><div class="quote__head"><svg class="quote__g" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span class="quote__stars">★★★★★</span></div><span class="quote__name">A&nbsp;J</span><span class="quote__text">Happy with the investment build. The inclusions were better than most for the price point, and we had tenants ready to move in within two weeks of completion.</span></div>
+          <div class="quote"><div class="quote__head"><svg class="quote__g" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span class="quote__stars">★★★★★</span></div><span class="quote__name">Pradish&nbsp;B</span><span class="quote__text">The quality and finish of the home is awesome. They have a very good colour scheme which gives a pleasant feeling inside the home.</span></div>
+          <div class="quote"><div class="quote__head"><svg class="quote__g" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span class="quote__stars">★★★★★</span></div><span class="quote__name">Timothy&nbsp;H</span><span class="quote__text">Archie from Tomorrow Homes was fantastic to work with. He brought both his own experience and his father's into the project, which gave me real confidence.</span></div>
+          <div class="quote"><div class="quote__head"><svg class="quote__g" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span class="quote__stars">★★★★★</span></div><span class="quote__name">Walker&nbsp;T</span><span class="quote__text">The team at Tomorrow Homes are helpful as they know their stuff, guiding us through the process of building our lovely home.</span></div>
+          <div class="quote"><div class="quote__head"><svg class="quote__g" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span class="quote__stars">★★★★★</span></div><span class="quote__name">Margarita&nbsp;K</span><span class="quote__text">I'm extremely happy with the final result. I highly recommend Tomorrow Homes to anyone looking for reliable, attentive, and skilled builders.</span></div>
+          <div class="quote"><div class="quote__head"><svg class="quote__g" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span class="quote__stars">★★★★★</span></div><span class="quote__name">Lucinda&nbsp;A</span><span class="quote__text">I appreciated the regular updates through their app and the progress photos along the way. The build quality is excellent.</span></div>
+          <div class="quote"><div class="quote__head"><svg class="quote__g" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span class="quote__stars">★★★★★</span></div><span class="quote__name">Mira&nbsp;M</span><span class="quote__text">They walked us through everything, from upgrade to handover. Communication was top-notch, and we receive fortnightly build updates since we live interstate.</span></div>
+          <div class="quote"><div class="quote__head"><svg class="quote__g" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span class="quote__stars">★★★★★</span></div><span class="quote__name">Lidia&nbsp;T</span><span class="quote__text">Everything was included: fencing, driveway, blinds, even letterbox. Just moved in last week and couldn't be happier.</span></div>
+          <div class="quote"><div class="quote__head"><svg class="quote__g" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span class="quote__stars">★★★★★</span></div><span class="quote__name">Mick&nbsp;L</span><span class="quote__text">High quality taps and well designed kitchens and bathrooms. Everything was included. Highly recommend building with Tomorrow Homes.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ THE BUILD ============ -->
+  <section id="the-build" class="section-pad" data-theme="light">
+    <div class="wrap">
+      <div class="split">
+        <div class="split__media reveal">
+          <div class="ph"><span class="ph__label">Detail shot — joinery / EV charge point</span></div>
+        </div>
+        <div class="split__body reveal" data-d="1">
+          <span class="eyebrow">The Build</span>
+          <h2>Tomorrow, Built in</h2>
+          <p class="body muted">Unlike most builders, every Tomorrow Home comes future-ready as standard. EV charging, energy efficiency and smart-home fundamentals are included from the outset, because a home built today should still make practical and financial sense tomorrow.</p>
+          <div class="btn-row">
+            <a class="btn btn--solid" href="#">View our smart features</a>
+            <a class="btn btn--outline" href="#">Turnkey inclusions</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ THE STUDIO ============ -->
+  <section id="the-studio" class="section-pad" data-theme="light" style="padding-top:0; padding-bottom:0;">
+    <div class="wrap">
+      <div class="studio__head reveal">
+        <span class="eyebrow">Studio Tomorrow</span>
+        <h2>Design-led,<br>from door to detail</h2>
+        <p class="body muted" style="max-width:58ch;">We decided early that design and construction shouldn't be separated. Layout, orientation, liveability — get those wrong and no amount of finish can save you. Studio Tomorrow is our in-house design studio. It exists to keep those decisions close to the people who build. This holistic approach ensures that every home we deliver is considered, compliant and built for the long term.</p>
+          <div class="btn-row">
+            <a class="btn btn--solid" href="#">Explore interiors</a>
+            <a class="btn btn--outline" href="#">Explore facades</a>
+          </div>
+      </div>
+      <div class="selector-head reveal">
+        <span class="eyebrow">Exterior</span>
+        <h3>Explore facades</h3>
+      </div>
+      <div class="facade-carousel reveal" id="facadeCarousel">
+        <div class="fc-stage">
+          <button class="fc-arrow fc-arrow--prev" id="fcPrev" aria-label="Previous facade">
+            <svg width="11" height="18" viewBox="0 0 11 18" fill="none"><path d="M9.5 1L1.5 9l8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <figure class="fc-panel fc-panel--side" aria-hidden="true"><img id="fcPrevImg" src="assets/facade-claremont.jpg" alt="" /></figure>
+          <figure class="fc-panel fc-panel--focal" id="fcFocal">
+            <div class="fc-layer is-active"><img src="assets/facade-brae.jpg" alt="Studio Tomorrow facade study" /></div>
+            <div class="fc-layer"><img src="assets/facade-vaucluse.jpg" alt="Studio Tomorrow facade study" /></div>
+            <button class="fc-expand" id="fcExpand" aria-label="View fullscreen">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M1 5.5V1h4.5M15 5.5V1h-4.5M1 10.5V15h4.5M15 10.5V15h-4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </figure>
+          <figure class="fc-panel fc-panel--side" aria-hidden="true"><img id="fcNextImg" src="assets/facade-vaucluse.jpg" alt="" /></figure>
+          <button class="fc-arrow fc-arrow--next" id="fcNext" aria-label="Next facade">
+            <svg width="11" height="18" viewBox="0 0 11 18" fill="none"><path d="M1.5 1l8 8-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+        <div class="fc-caption-row">
+          <span class="fc-title" id="fcTitle">Brae</span>
+          <hr class="rule" />
+          <span class="studio__caption" style="margin:0;">Studio Tomorrow — facades</span>
+        </div>
+        <div class="fc-thumbs" id="fcThumbs">
+          <div class="fc-thumbs-track" id="fcThumbsTrack"></div>
+        </div>
+      </div>
+
+      <div class="fc-lightbox" id="fcLightbox" aria-hidden="true" role="dialog" aria-label="Facade gallery">
+        <button class="fc-lb-close" id="fcLbClose" aria-label="Close">&times;</button>
+        <button class="fc-lb-arrow fc-lb-arrow--prev" id="fcLbPrev" aria-label="Previous">
+          <svg width="12" height="20" viewBox="0 0 11 18" fill="none"><path d="M9.5 1L1.5 9l8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="fc-lb-stage" id="fcLbStage">
+          <img class="fc-lb-img" id="fcLbImg" src="assets/facade-brae.jpg" alt="Facade study" draggable="false" />
+        </div>
+        <button class="fc-lb-arrow fc-lb-arrow--next" id="fcLbNext" aria-label="Next">
+          <svg width="12" height="20" viewBox="0 0 11 18" fill="none"><path d="M1.5 1l8 8-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="fc-lb-meta">
+          <span id="fcLbMeta">Brae</span>
+          <span class="fc-lb-hint">Scroll, pinch or double-tap to zoom</span>
+        </div>
+      </div>
+
+      <!-- Interior selector -->
+      <div class="interior-selector reveal" id="interiorSelector">
+        <div class="selector-head">
+          <span class="eyebrow">Interior</span>
+          <h3>Explore interior</h3>
+        </div>
+        <div class="int-btns" id="intBtns" role="group" aria-label="Interior schemes">
+          <button type="button" class="int-btn is-active" data-scheme="moment" aria-pressed="true">Moment</button>
+          <button type="button" class="int-btn" data-scheme="present" aria-pressed="false">Present</button>
+          <button type="button" class="int-btn" data-scheme="today" aria-pressed="false">Today</button>
+          <button type="button" class="int-btn" data-scheme="tomorrow" aria-pressed="false">Tomorrow</button>
+          <button type="button" class="int-btn" data-scheme="yesterday" aria-pressed="false">Yesterday</button>
+        </div>
+        <div class="int-view" id="intView">
+          <img class="int-img is-active" id="intImgA" src="assets/interior-moment.jpg" alt="Moment scheme — kitchen" />
+          <img class="int-img" id="intImgB" src="assets/interior-present.jpg" alt="" />
+          <span class="int-view__cap" id="intCap">Moment</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DEVELOPMENTS ============ -->
+  <section id="developments" class="section-pad" data-theme="light">
+    <div class="wrap">
+      <div class="studio__head reveal">
+        <span class="eyebrow">Developments</span>
+        <h2>Livability,<br>postcode by postcode</h2>
+        <p class="body muted" style="max-width:58ch;">Having an in-house design studio means that we can curate spaces for each postcode and the people that make up our neighbourhoods. </p>
+      </div>
+      <div class="dev__grid">
+        <a class="dev-card reveal" href="#">
+          <div class="dev-card__media ph-wrap"><img class="dev-card__img" src="assets/dev-flora.png" alt="Flora development exterior" /></div>
+          <div class="dev-card__foot"><span class="dev-card__name">Flora</span><span class="arrow-link">View project <span class="arr">→</span></span></div>
+        </a>
+        <a class="dev-card reveal" data-d="1" href="#">
+          <div class="dev-card__media ph-wrap"><img class="dev-card__img" src="assets/dev-coast.png" alt="Coast development exterior" /></div>
+          <div class="dev-card__foot"><span class="dev-card__name">Coast</span><span class="arrow-link">View project <span class="arr">→</span></span></div>
+        </a>
+        <a class="dev-card reveal" href="#">
+          <div class="dev-card__media ph-wrap"><img class="dev-card__img" src="assets/dev-newport.png" alt="Newport development exterior" /></div>
+          <div class="dev-card__foot"><span class="dev-card__name">Newport</span><span class="arrow-link">View project <span class="arr">→</span></span></div>
+        </a>
+        <a class="dev-card reveal" data-d="1" href="#">
+          <div class="dev-card__media ph-wrap"><img class="dev-card__img" src="assets/dev-woolstore.png" alt="Woolstore development exterior" /></div>
+          <div class="dev-card__foot"><span class="dev-card__name">Woolstore</span><span class="arrow-link">View project <span class="arr">→</span></span></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer" data-theme="dark">
+    <div class="wrap">
+      <div class="footer__top">
+        <div>
+          <a class="footer__logo" href="#top" aria-label="Tomorrow Homes home"><img src="assets/logo-white.png" alt="Tomorrow Homes" /></a>
+          <p class="footer__tag">Build for today,<br>and every tomorrow after.</p>
+        </div>
+        <div class="footer__contact">
+          <span class="lbl">Get in touch</span>
+          <span>Level 1, 466 Malvern Road, Prahran VIC 3181</span>
+          <a href="tel:+61398270998">T&nbsp; 03 9827 0998</a>
+          <a href="mailto:info@tomorrowhomes.com.au">info@tomorrowhomes.com.au</a>
+          <div class="footer__rating">
+            <span class="stars">★★★★★</span>
+            <span class="rtxt">Rated 4.7 on Google</span>
+          </div>
+          <div class="footer__social">
+            <a href="#" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.25 8h4.5V23H.25V8zm7.5 0h4.31v2.05h.06c.6-1.14 2.07-2.34 4.26-2.34 4.56 0 5.4 3 5.4 6.9V23h-4.5v-6.5c0-1.55-.03-3.54-2.16-3.54-2.16 0-2.49 1.69-2.49 3.43V23h-4.5V8z"/></svg></a>
+            <a href="#" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07c0 6.02 4.39 11.01 10.13 11.93v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.69.24 2.69.24v2.97h-1.52c-1.49 0-1.96.93-1.96 1.89v2.25h3.33l-.53 3.49h-2.8V24C19.61 23.08 24 18.09 24 12.07z"/></svg></a>
+            <a href="#" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.7 3.7 0 01-1.38-.9 3.7 3.7 0 01-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16zm0 3.68A6.16 6.16 0 1018.16 12 6.16 6.16 0 0012 5.84zm0 10.16A4 4 0 1116 12a4 4 0 01-4 4zm6.4-10.4a1.44 1.44 0 11-1.44-1.44 1.44 1.44 0 011.44 1.44z"/></svg></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer__legal">
+        <a href="#">Terms &amp; Conditions</a>
+        <a href="#">Privacy Policy</a>
+        <span class="copy">© Copyright 2026 Tomorrow Homes Pty Ltd. All Rights Reserved.</span>
+      </div>
+    </div>
+  </footer>
+  </div><!-- /#page -->
+
+  <!-- ============ VIDEO LIGHTBOX ============ -->
+  <div class="vlb" id="videoLightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Video player">
+    <button class="vlb__close" id="videoLightboxClose" aria-label="Close video">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 4l12 12M16 4L4 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+    <div class="vlb__frame">
+      <div class="vlb__ratio" id="videoLightboxMount"></div>
+    </div>
+  </div>
+
+  <script>
+    // Seamless ticker: clone the group so the -50% loop is gapless
+    (function () {
+      const group = document.getElementById('tickerGroup');
+      const track = document.getElementById('tickerTrack');
+      if (group && track) {
+        const clone = group.cloneNode(true);
+        clone.setAttribute('aria-hidden', 'true');
+        clone.id = '';
+        track.appendChild(clone);
+      }
+    })();
+
+    // Scroll reveals
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.16, rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+
+    // Video lightbox — play YouTube on click
+    (function () {
+      const lb = document.getElementById('videoLightbox');
+      const mount = document.getElementById('videoLightboxMount');
+      const closeBtn = document.getElementById('videoLightboxClose');
+      if (!lb || !mount || !closeBtn) return;
+      let lastFocus = null;
+
+      function open(id) {
+        lastFocus = document.activeElement;
+        mount.innerHTML =
+          '<iframe src="https://www.youtube.com/embed/' + id +
+          '?autoplay=1&rel=0" title="Video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+        lb.classList.add('open');
+        lb.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        closeBtn.focus();
+      }
+      function close() {
+        lb.classList.remove('open');
+        lb.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        setTimeout(() => { mount.innerHTML = ''; }, 340);
+        if (lastFocus) lastFocus.focus();
+      }
+
+      document.querySelectorAll('.video-ph[data-youtube]').forEach((el) => {
+        el.addEventListener('click', () => open(el.getAttribute('data-youtube')));
+        el.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(el.getAttribute('data-youtube')); }
+        });
+      });
+      closeBtn.addEventListener('click', close);
+      lb.addEventListener('click', (e) => { if (e.target === lb) close(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && lb.classList.contains('open')) close(); });
+    })();
+  </script>
+  <script src="landing-intro.js"></script>
+  <script src="studio-carousel.js"></script>
+  <script src="interior-selector.js"></script>
+</body>
+</html>
+
+<style id="__om-edit-overrides">
+.footer__top :is(h1,h2,h3,h4,h5,h6,p,li,dt,dd,blockquote,figcaption,label,span,a,em,strong,small,td,th,caption) >div { width: 400px !important }
+</style>
