@@ -287,6 +287,9 @@
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     .reveal { opacity: 1; transform: none; transition: none; }
+    /* Show the logo wordmark at once — skip the typewriter reveal */
+    .studio-logo .typedPath,
+    .studio-logo.is-typing .typedPath { opacity: 1; animation: none; }
   }
 
   /* ============ NAV ============ */
@@ -770,6 +773,27 @@
 
   /* ---- The Studio (asymmetric) ---- */
   .studio__head { max-width: 50ch; margin-bottom: clamp(56px, 7vw, 96px); }
+  /* Head variant with the animated logo sitting in the right-hand space */
+  .studio__head--logo {
+    max-width: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(32px, 6vw, 96px);
+  }
+  .studio__head--logo .studio__head-text { max-width: 50ch; }
+  .studio__logo-wrap { flex: 0 0 auto; line-height: 0; }
+  .studio-logo { width: clamp(210px, 24vw, 330px); height: auto; }
+  /* Each "studio tomorrow" letter starts hidden, then SNAPS in (steps(1) = no fade).
+     Animation is gated on .is-typing, which JS toggles on a loop while the logo
+     is on screen — so the word writes itself out over and over. */
+  .studio-logo .typedPath { opacity: 0; }
+  .studio-logo.is-typing .typedPath { animation: studioAppear 0.01s steps(1) forwards; }
+  @keyframes studioAppear { to { opacity: 1; } }
+  @media (max-width: 760px) {
+    .studio__head--logo { flex-direction: column; align-items: flex-start; gap: 40px; }
+    .studio-logo { width: 225px; }
+  }
   .studio__head h2 {
     font-family: var(--serif);
     font-weight: 400;
@@ -1165,10 +1189,35 @@
   <!-- ============ THE STUDIO ============ -->
   <section id="the-studio" class="section-pad" data-theme="light" style="padding-top:0; padding-bottom:0;">
     <div class="wrap">
-      <div class="studio__head reveal">
-        <span class="eyebrow">Studio Tomorrow</span>
-        <h2>Design-led,<br>from door to detail</h2>
-        <p class="body muted" style="max-width:58ch;">We decided early that design and construction shouldn't be separated. Layout, orientation, liveability — get those wrong and no amount of finish can save you. Studio Tomorrow is our in-house design studio. It exists to keep those decisions close to the people who build. This holistic approach ensures that every home we deliver is considered, compliant and built for the long term.</p>
+      <div class="studio__head studio__head--logo reveal">
+        <div class="studio__head-text">
+          <span class="eyebrow">Studio Tomorrow</span>
+          <h2>Design-led,<br>from door to detail</h2>
+          <p class="body muted" style="max-width:58ch;">We decided early that design and construction shouldn't be separated. Layout, orientation, liveability — get those wrong and no amount of finish can save you. Studio Tomorrow is our in-house design studio. It exists to keep those decisions close to the people who build. This holistic approach ensures that every home we deliver is considered, compliant and built for the long term.</p>
+        </div>
+        <span class="studio__logo-wrap" id="studioLogoWrap">
+          <svg class="studio-logo" viewBox="0 0 131 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Large S/T monogram — always visible, never animated -->
+            <path d="M0 76.9922H0.908C1.512 79.9615 2.29533 82.4629 3.258 84.4962C4.218 86.5309 5.276 88.2082 6.432 89.5282C7.58667 90.8469 8.79667 91.8635 10.062 92.5782C11.326 93.2942 12.604 93.8169 13.896 94.1462C15.1867 94.4769 16.424 94.6689 17.608 94.7222C18.7893 94.7769 19.9027 94.8049 20.948 94.8062C23.86 94.8062 26.2513 94.3662 28.122 93.4862C29.99 92.6062 31.4747 91.4929 32.576 90.1462C33.6733 88.7995 34.4427 87.3422 34.884 85.7742C35.324 84.2075 35.544 82.7649 35.544 81.4462C35.544 79.5222 35.1867 77.8722 34.472 76.4962C33.756 75.1229 32.8487 73.9549 31.75 72.9922C30.65 72.0309 29.454 71.2475 28.162 70.6422C26.8713 70.0369 25.6487 69.5695 24.494 69.2402L15.008 66.3542C10.5547 64.9809 7.18733 63.1662 4.906 60.9102C2.62467 58.6569 1.484 55.6329 1.484 51.8382C1.484 49.3662 1.924 47.0709 2.804 44.9522C3.684 42.8389 4.92133 41.0109 6.516 39.4682C8.11067 37.9295 10.0207 36.7202 12.246 35.8402C14.4727 34.9602 16.9053 34.5209 19.544 34.5222C21.4693 34.5222 23.078 34.6869 24.37 35.0162C25.662 35.3455 26.7753 35.7162 27.71 36.1282L30.224 37.2422C30.9653 37.5729 31.7213 37.7382 32.492 37.7382C33.2067 37.7382 33.688 37.6415 33.936 37.4482C34.1827 37.2562 34.526 36.7755 34.966 36.0062H36.12V50.9322H35.132C34.8013 48.9535 34.238 47.0429 33.442 45.2002C32.6433 43.3602 31.612 41.7382 30.348 40.3342C29.0827 38.9342 27.5573 37.8075 25.772 36.9542C23.984 36.1022 21.908 35.6762 19.544 35.6762C18.2253 35.6762 16.7687 35.8542 15.174 36.2102C13.5793 36.5702 12.0953 37.1895 10.722 38.0682C9.34733 38.9482 8.206 40.1022 7.298 41.5302C6.39133 42.9609 5.938 44.7755 5.938 46.9742C5.938 48.7342 6.29533 50.2322 7.01 51.4682C7.72467 52.7055 8.646 53.7502 9.774 54.6022C10.8993 55.4555 12.1633 56.1702 13.566 56.7462C14.966 57.3235 16.382 57.8322 17.814 58.2722L27.792 61.4062C28.836 61.7355 30.1553 62.1755 31.75 62.7262C33.3447 63.2755 34.898 64.0995 36.41 65.1982C37.922 66.2995 39.214 67.7569 40.286 69.5702C41.358 71.3849 41.894 73.6935 41.894 76.4962C41.894 79.0829 41.4127 81.5435 40.45 83.8782C39.4887 86.2169 38.1007 88.2782 36.286 90.0622C34.4727 91.8502 32.2733 93.2802 29.688 94.3522C27.104 95.4242 24.1907 95.9602 20.948 95.9602C19.792 95.9602 18.7747 95.9462 17.896 95.9182C17.016 95.8915 16.1913 95.8229 15.422 95.7122C14.6513 95.6015 13.882 95.4782 13.114 95.3422C12.342 95.2049 11.4893 94.9982 10.556 94.7222C9.456 94.3929 8.274 94.0082 7.01 93.5682C5.74467 93.1282 4.64467 92.9082 3.71 92.9082C2.886 92.9082 2.32267 93.0729 2.02 93.4022C1.71733 93.7329 1.456 94.1729 1.236 94.7222H0V76.9922Z" fill="black"/>
+            <path d="M53.0264 93.5682H62.1804V37.1602H57.3984C56.2958 37.1602 55.0584 37.2562 53.6864 37.4482C52.3104 37.6415 50.9224 38.1775 49.5224 39.0562C48.1198 39.9362 46.7724 41.3242 45.4804 43.2202C44.1871 45.1188 43.0738 47.7442 42.1404 51.0962H41.2324V36.0062H91.3744V51.0962H90.4664C89.5331 47.7442 88.4197 45.1188 87.1264 43.2202C85.8344 41.3242 84.4878 39.9362 83.0864 39.0562C81.6838 38.1775 80.2958 37.6415 78.9224 37.4482C77.5478 37.2562 76.3104 37.1602 75.2104 37.1602H70.4264V93.5682H79.5804V94.7222H53.0264V93.5682Z" fill="black"/>
+
+            <!-- "studio tomorrow" — 14 letter paths, revealed one-by-one -->
+            <path class="typedPath" style="animation-delay:400ms"  d="M70.248 28.7041L69.398 28.2081C70.014 27.9061 70.768 27.3201 71.084 26.2561C71.348 25.3761 71.054 24.5481 70.25 24.3061C69.494 24.0821 68.962 24.3281 68.176 25.6041C67.388 26.8961 66.432 27.3381 65.392 27.0281C64.338 26.7161 63.716 25.5861 64.172 24.0621C64.426 23.2081 64.998 22.5541 65.454 22.2461L66.168 22.7001C65.66 23.0881 65.158 23.6941 64.976 24.3021C64.7 25.2301 64.974 25.8941 65.67 26.1001C66.202 26.2581 66.746 26.0561 67.404 24.9841C68.3 23.5121 69.212 22.9861 70.438 23.3521C71.888 23.7841 72.27 25.2181 71.89 26.4961C71.528 27.7101 70.79 28.4201 70.248 28.7041Z" fill="black"/>
+            <path class="typedPath" style="animation-delay:480ms"  d="M69.2016 15.7301L67.6496 18.0041L66.9336 17.5161L70.6216 12.1141L71.3356 12.6021L69.7836 14.8761L75.4736 18.7581L74.8916 19.6141L69.2016 15.7301Z" fill="black"/>
+            <path class="typedPath" style="animation-delay:560ms"  d="M76.8535 11.6002L74.4355 8.20015L75.2975 7.58615L77.7255 10.9962C78.8855 12.6282 80.1315 12.8202 81.2895 11.9962C82.4475 11.1722 82.6755 9.93215 81.5155 8.30015L79.0895 4.89015L79.9095 4.30615L82.3275 7.70615C83.8495 9.84215 83.4255 11.5862 81.7935 12.7482C80.1615 13.9082 78.3735 13.7382 76.8535 11.6002Z" fill="black"/>
+            <path class="typedPath" style="animation-delay:640ms"  d="M89.6322 7.78819C92.0822 7.19019 92.4342 5.63819 92.0642 4.13219C91.6962 2.62419 90.6682 1.41219 88.2182 2.01219L86.8743 2.34219L88.2882 8.11819L89.6322 7.78819ZM85.6562 1.70819L87.9902 1.13619C90.9162 0.420188 92.6002 1.80419 93.1082 3.87619C93.6142 5.94819 92.7622 7.95419 89.8342 8.67019L87.5002 9.24219L85.6562 1.70819Z" fill="black"/>
+            <path class="typedPath" style="animation-delay:720ms"  d="M97.6802 3.9565e-05L98.7122 0.0420394L98.4002 7.79004L97.3662 7.74804L97.6802 3.9565e-05Z" fill="black"/>
+            <path class="typedPath" style="animation-delay:800ms"  d="M109.744 6.60822C110.374 4.82822 109.63 3.13822 107.96 2.54622C106.28 1.95022 104.636 2.79422 104.004 4.57222C103.378 6.33822 104.118 8.04222 105.8 8.63822C107.47 9.23022 109.118 8.37622 109.744 6.60822ZM102.994 4.21422C103.788 1.97022 106.008 0.934218 108.25 1.73022C110.48 2.52022 111.55 4.72622 110.756 6.96622C109.96 9.20822 107.74 10.2462 105.51 9.45422C103.268 8.66022 102.198 6.45622 102.994 4.21422Z" fill="black"/>
+            <path class="typedPath" style="animation-delay:880ms"  d="M118.6 8.44218L113.85 14.0602L113.516 13.7762L118.266 8.15818L116.152 6.37218L116.408 6.06618L120.972 9.92218L120.714 10.2282L118.6 8.44218Z" fill="black"/>
+            <path class="typedPath" style="animation-delay:960ms"  d="M125.795 16.7421C124.799 15.0621 122.821 14.4901 120.897 15.6321C118.973 16.7721 118.525 18.7821 119.521 20.4601C120.505 22.1181 122.495 22.7121 124.419 21.5721C126.343 20.4301 126.777 18.4001 125.795 16.7421ZM119.165 20.6721C118.037 18.7701 118.593 16.4861 120.673 15.2541C122.741 14.0261 125.023 14.6281 126.151 16.5301C127.273 18.4201 126.713 20.7221 124.643 21.9501C122.563 23.1841 120.287 22.5641 119.165 20.6721Z" fill="black"/>
+            <path class="typedPath" style="animation-delay:1040ms" d="M123.164 33.6782L130.048 32.7682C130.048 32.7682 128.908 32.4362 128.638 32.3542L122.758 30.6022L122.712 30.2562L127.934 27.0362C128.198 26.8702 129.19 26.2822 129.19 26.2822L122.306 27.1922L122.252 26.7822L129.942 25.7662L130.006 26.2262L123.312 30.3602L130.85 32.6222L130.912 33.0842L123.22 34.1022L123.164 33.6782Z" fill="black"/>
+            <path class="typedPath" style="animation-delay:1120ms" d="M129.281 42.8661C129.799 40.9841 128.837 39.1641 126.683 38.5721C124.525 37.9781 122.769 39.0501 122.251 40.9341C121.741 42.7901 122.695 44.6341 124.851 45.2281C127.007 45.8201 128.769 44.7241 129.281 42.8661ZM121.853 40.8241C122.439 38.6921 124.467 37.5061 126.797 38.1481C129.117 38.7861 130.267 40.8461 129.679 42.9761C129.097 45.0941 127.053 46.2901 124.735 45.6521C122.403 45.0101 121.269 42.9421 121.853 40.8241Z" fill="black"/>
+            <path class="typedPath" style="animation-delay:1200ms" d="M122.125 49.87L121.059 51.348C120.261 52.462 120.731 53.356 121.465 53.884C122.189 54.406 123.209 54.582 124.007 53.47L125.073 51.99L122.125 49.87ZM116.439 51.4L116.743 50.98L120.781 51.052L121.799 49.636L119.103 47.696L119.359 47.34L125.653 51.868L124.333 53.704C123.413 54.982 122.153 54.92 121.209 54.242C120.337 53.614 119.901 52.584 120.531 51.446L116.439 51.4Z" fill="black"/>
+            <path class="typedPath" style="animation-delay:1280ms" d="M115.994 56.8722L114.528 57.9562C113.426 58.7682 113.6 59.7642 114.136 60.4922C114.666 61.2102 115.582 61.6902 116.684 60.8762L118.152 59.7942L115.994 56.8722ZM110.112 56.5882L110.53 56.2802L114.352 57.5862L115.756 56.5502L113.784 53.8782L114.136 53.6182L118.742 59.8562L116.922 61.1982C115.654 62.1362 114.474 61.6902 113.784 60.7542C113.146 59.8922 113.046 58.7762 113.994 57.8842L110.112 56.5882Z" fill="black"/>
+            <path class="typedPath" style="animation-delay:1360ms" d="M106.274 66.2302C108.148 65.6802 109.192 63.9062 108.562 61.7602C107.934 59.6142 106.098 58.6822 104.224 59.2302C102.376 59.7722 101.308 61.5522 101.936 63.7002C102.566 65.8462 104.424 66.7722 106.274 66.2302ZM104.108 58.8342C106.23 58.2122 108.304 59.3162 108.984 61.6362C109.66 63.9442 108.512 66.0062 106.39 66.6262C104.28 67.2442 102.19 66.1322 101.514 63.8242C100.834 61.5022 102 59.4522 104.108 58.8342Z" fill="black"/>
+            <path class="typedPath" style="animation-delay:1440ms" d="M90.97 59.5162L91.302 59.5582L92.552 66.6282L95.546 60.1082L95.892 60.1522L97.332 68.1582L96.87 68.1002L95.592 60.9602L92.578 67.5442L92.256 67.5022L91.014 60.3682L87.988 66.9502L87.54 66.8922L90.97 59.5162Z" fill="black"/>
+          </svg>
+        </span>
       </div>
       <div class="selector-head reveal">
         <span class="eyebrow">Exterior</span>
@@ -1348,6 +1397,34 @@
       });
     }, { threshold: 0.16, rootMargin: '0px 0px -8% 0px' });
     document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+
+    // Studio Tomorrow logo — replay the typewriter on a loop while it's on screen
+    (function () {
+      const logo = document.querySelector('.studio-logo');
+      const wrap = document.getElementById('studioLogoWrap');
+      if (!logo || !wrap) return;
+      const LAST_LETTER_MS = 1440; // when the final letter lands
+      const HOLD_MS = 2200;        // pause showing the full word before restarting
+      const CYCLE_MS = LAST_LETTER_MS + HOLD_MS;
+      let timer = null;
+      const play = () => {
+        logo.classList.remove('is-typing');
+        void wrap.offsetWidth; // reflow on the HTML wrapper (SVG offsetWidth is unreliable) to restart the animation
+        logo.classList.add('is-typing');
+      };
+      const logoIo = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting && timer === null) {
+            play();
+            timer = setInterval(play, CYCLE_MS);
+          } else if (!e.isIntersecting && timer !== null) {
+            clearInterval(timer);
+            timer = null;
+          }
+        });
+      }, { threshold: 0.3 });
+      logoIo.observe(logo);
+    })();
 
     // Video lightbox — play YouTube on click
     (function () {

@@ -54,8 +54,42 @@
     });
   }
 
+  // ---- Auto-rotate until the user interacts ----
+  var ROTATE_MS = 2200;
+  var auto = null;
+  var stopped = false;
+  var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function next() {
+    var i = schemes.findIndex(function (s) { return s.key === cur; });
+    select(schemes[(i + 1) % schemes.length].key);
+  }
+  function startAuto() {
+    if (stopped || auto || prefersReduced) return;
+    auto = setInterval(next, ROTATE_MS);
+  }
+  function pauseAuto() {
+    if (auto) { clearInterval(auto); auto = null; }
+  }
+  function stopAuto() {
+    stopped = true;
+    pauseAuto();
+  }
+
   btns.addEventListener('click', function (e) {
     var b = e.target.closest('.int-btn');
-    if (b) select(b.dataset.scheme);
+    if (b) { stopAuto(); select(b.dataset.scheme); }
   });
+
+  // Only rotate while the selector is on screen; halt for good once a user picks.
+  var selector = document.getElementById('interiorSelector');
+  if (selector && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) startAuto(); else pauseAuto();
+      });
+    }, { threshold: 0.3 }).observe(selector);
+  } else {
+    startAuto();
+  }
 })();
