@@ -40,16 +40,24 @@
 
   function setFocal(i, dir) {
     var back = layers[1 - front];
+    var frontLayer = layers[front];
     var fImg = back.querySelector('img');
     fImg.src = slides[i].src;
+
+    // Snap incoming off-screen with no transition
     back.style.transition = 'none';
-    back.style.transform = 'translateX(' + (dir * 46) + 'px) scale(1.05)';
-    // force reflow
+    back.style.transform = 'translateX(' + (dir * 100) + '%)';
     void back.offsetWidth;
+
+    // Slide incoming in + fade in via is-active
     back.style.transition = '';
     back.classList.add('is-active');
-    back.style.transform = 'translateX(0) scale(1)';
-    layers[front].classList.remove('is-active');
+    back.style.transform = 'translateX(0)';
+
+    // Slide outgoing out (parallax) + fade out via is-active removal
+    frontLayer.classList.remove('is-active');
+    frontLayer.style.transform = 'translateX(' + (-dir * 40) + '%)';
+
     front = 1 - front;
   }
 
