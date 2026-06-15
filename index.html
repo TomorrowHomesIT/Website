@@ -37,7 +37,7 @@
     --sage: #7D7F79;
     --steel: #5E7A8D;
     --line: rgba(16, 24, 32, 0.14);
-    --nav-h: 76px;
+    --nav-h: 95px;
     --serif: "Cormorant Garamond", Georgia, serif;
     --sans: "Jost", system-ui, sans-serif;
     --mono: "Space Mono", monospace;
@@ -319,17 +319,17 @@
     box-shadow: 0 1px 0 rgba(255,255,255,0.06);
   }
   /* Logo: full Tomorrow + Homes lockup. The TOMORROW band (top 64.24%) is the dock target. */
-  .nav__logo { position: relative; display: block; width: 157px; aspect-ratio: 1602 / 302; }
+  .nav__logo { position: relative; display: block; width: 196px; aspect-ratio: 1602 / 302; }
   .nav__logo img { position: absolute; top: 0; left: 0; width: 100%; height: auto; transition: opacity .4s ease; }
   .nav__logo .logo-w { opacity: 0; }
   .nav__logo .logo-b { opacity: 1; }
   .nav.theme-dark .nav__logo .logo-w { opacity: 1; }
   .nav.theme-dark .nav__logo .logo-b { opacity: 0; }
   .nav__logo-mark { position: absolute; top: 0; left: 0; width: 100%; height: 64.24%; pointer-events: none; }
-  .nav__right { display: flex; align-items: center; gap: clamp(20px, 2.6vw, 44px); }
-  .nav__links { display: flex; align-items: center; gap: clamp(20px, 2.6vw, 40px); }
+  .nav__right { display: flex; align-items: center; gap: clamp(25px, 3.25vw, 55px); }
+  .nav__links { display: flex; align-items: center; gap: clamp(25px, 3.25vw, 50px); }
   .nav__links a {
-    font-size: 12px;
+    font-size: 15px;
     font-weight: 400;
     letter-spacing: 0.16em;
     text-transform: uppercase;
@@ -352,13 +352,13 @@
   .nav.theme-dark .nav__links a:hover { color: #aebfca; }
   .nav__links a:hover::after { width: 100%; }
   .nav__cta {
-    font-size: 11.5px;
+    font-size: 14.5px;
     font-weight: 500;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--paper);
     background: var(--ink);
-    padding: 11px 20px;
+    padding: 14px 25px;
     border-radius: 1px;
     white-space: nowrap;
     transition: background .4s ease, color .4s ease;
@@ -1086,7 +1086,7 @@
   <!-- ============ BRAND INTRO VIDEO ============ -->
   <section class="video-section" data-theme="dark" aria-label="Brand introduction video">
     <div class="video-ph video-ph--cover" role="button" tabindex="0" data-youtube="JhryhnXxapA" aria-label="Play brand introduction video">
-      <img class="video-ph__cover" src="brand-intro-cover.jpg" alt="Inside a Tomorrow home — smart-home demonstration" />
+      <img class="video-ph__cover" src="brand-intro-cover.jpg" alt="Tomorrow Homes team reviewing design plans" />
       <span class="video-ph__tag">
 </span>
       <div class="video-ph__center">

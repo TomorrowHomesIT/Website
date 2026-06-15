@@ -2,14 +2,22 @@
 (function () {
   var R = window.__resources || {};
   var slides = [
-    { src: R.facadeBrae      || 'facade-brae.jpg',      title: 'Brae' },
-    { src: R.facadeVaucluse  || 'facade-vaucluse.jpg',  title: 'Vaucluse' },
-    { src: R.facadeMainridge || 'facade-mainridge.jpg', title: 'Mainridge' },
-    { src: R.facadeMosman    || 'facade-mosman.jpg',    title: 'Mosman' },
-    { src: R.facadeHamilton  || 'facade-hamilton.jpg',  title: 'Hamilton' },
-    { src: R.facadeToorak    || 'facade-toorak.jpg',    title: 'Toorak' },
-    { src: R.facadePortsea   || 'facade-portsea.jpg',   title: 'Portsea' },
-    { src: R.facadeClaremont || 'facade-claremont.jpg', title: 'Claremont' }
+    { src: R.facadeBrae       || 'facade-brae.jpg',       title: 'Brae' },
+    { src: R.facadeVaucluse   || 'facade-vaucluse.jpg',   title: 'Vaucluse' },
+    { src: R.facadeMainridge  || 'facade-mainridge.jpg',  title: 'Mainridge' },
+    { src: R.facadeMosman     || 'facade-mosman.jpg',     title: 'Mosman' },
+    { src: R.facadeHamilton   || 'facade-hamilton.jpg',   title: 'Hamilton' },
+    { src: R.facadeToorak     || 'facade-toorak.jpg',     title: 'Toorak' },
+    { src: R.facadePortsea    || 'facade-portsea.jpg',    title: 'Portsea' },
+    { src: R.facadeBellevue   || 'facade-bellevue.jpg',   title: 'Bellevue' },
+    { src: R.facadeTenerife   || 'facade-tenerife.jpg',   title: 'Tenerife' },
+    { src: R.facadeCentennial || 'facade-centennial.jpg', title: 'Centennial' },
+    { src: R.facadeArmadale   || 'facade-armadale.jpg',   title: 'Armadale' },
+    { src: R.facadeBalwyn     || 'facade-balwyn.jpg',     title: 'Balwyn' },
+    { src: R.facadeBrighton   || 'facade-brighton.jpg',   title: 'Brighton' },
+    { src: R.facadeFloreat    || 'facade-floreat.jpg',    title: 'Floreat' },
+    { src: R.facadePiper      || 'facade-piper.jpg',      title: 'Piper' },
+    { src: R.facadeClaremont  || 'facade-claremont.jpg',  title: 'Claremont' }
   ];
   var N = slides.length;
 
@@ -75,8 +83,21 @@
     if (lbOpen) loadLightbox(cur);
   }
 
-  document.getElementById('fcPrev').addEventListener('click', function () { go(cur - 1, -1); });
-  document.getElementById('fcNext').addEventListener('click', function () { go(cur + 1, 1); });
+  /* ---------- auto-rotate until the user interacts ---------- */
+  var ROTATE_MS = 2200;
+  var auto = null;
+  var autoStopped = false;
+  var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function startAuto() {
+    if (autoStopped || auto || prefersReduced) return;
+    auto = setInterval(function () { go(cur + 1, 1); }, ROTATE_MS);
+  }
+  function pauseAuto() { if (auto) { clearInterval(auto); auto = null; } }
+  function stopAuto() { autoStopped = true; pauseAuto(); }
+
+  document.getElementById('fcPrev').addEventListener('click', function () { stopAuto(); go(cur - 1, -1); });
+  document.getElementById('fcNext').addEventListener('click', function () { stopAuto(); go(cur + 1, 1); });
 
   /* ---------- thumbnails: infinite drag strip ---------- */
   var COPIES = 3;
@@ -115,6 +136,7 @@
   var down = false, startX = 0, startScroll = 0, moved = 0;
   thumbs.addEventListener('pointerdown', function (e) {
     if (e.pointerType !== 'mouse') return;
+    stopAuto();
     down = true; moved = 0; startX = e.clientX; startScroll = thumbs.scrollLeft;
     thumbs.classList.add('dragging');
     thumbs.setPointerCapture(e.pointerId);
@@ -137,6 +159,7 @@
     var btn = e.target.closest('.fc-thumb');
     if (!btn) return;
     if (moved > 6) return; // was a drag, not a click
+    stopAuto();
     go(parseInt(btn.dataset.index, 10));
   });
 
@@ -174,20 +197,20 @@
 
   focal.addEventListener('click', function (e) {
     if (e.target.closest('.fc-expand')) return; // handled below
-    openLightbox(cur);
+    stopAuto(); openLightbox(cur);
   });
   document.getElementById('fcExpand').addEventListener('click', function (e) {
-    e.stopPropagation(); openLightbox(cur);
+    e.stopPropagation(); stopAuto(); openLightbox(cur);
   });
   document.getElementById('fcLbClose').addEventListener('click', closeLightbox);
-  document.getElementById('fcLbPrev').addEventListener('click', function () { go(cur - 1, -1); });
-  document.getElementById('fcLbNext').addEventListener('click', function () { go(cur + 1, 1); });
+  document.getElementById('fcLbPrev').addEventListener('click', function () { stopAuto(); go(cur - 1, -1); });
+  document.getElementById('fcLbNext').addEventListener('click', function () { stopAuto(); go(cur + 1, 1); });
   lb.addEventListener('click', function (e) { if (e.target === lb || e.target === lbStage) closeLightbox(); });
   document.addEventListener('keydown', function (e) {
     if (!lbOpen) return;
     if (e.key === 'Escape') closeLightbox();
-    else if (e.key === 'ArrowLeft') go(cur - 1, -1);
-    else if (e.key === 'ArrowRight') go(cur + 1, 1);
+    else if (e.key === 'ArrowLeft') { stopAuto(); go(cur - 1, -1); }
+    else if (e.key === 'ArrowRight') { stopAuto(); go(cur + 1, 1); }
   });
 
   function clampScale(s) { return Math.max(1, Math.min(5, s)); }
@@ -279,6 +302,16 @@
     nextImg.src = slides[1].src;
     measure();
     updateMeta(0);
+    // Rotate only while the carousel is on screen; halt for good once the user interacts.
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) startAuto(); else pauseAuto();
+        });
+      }, { threshold: 0.3 }).observe(root);
+    } else {
+      startAuto();
+    }
   }
   if (document.readyState === 'complete') init();
   else window.addEventListener('load', init);
