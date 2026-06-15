@@ -600,6 +600,107 @@
   }
   .vlb__close:hover { background: rgba(255,255,255,0.12); border-color: #fff; }
 
+  /* ---- Document modal (scrollable PDF / image + download) ---- */
+  .doc-lb {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(12px, 3vw, 48px);
+    background: rgba(8, 12, 16, 0.92);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.32s ease, visibility 0.32s ease;
+  }
+  .doc-lb.open { opacity: 1; visibility: visible; }
+  .doc-lb__panel {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 920px;
+    height: 100%;
+    max-height: 90vh;
+    background: var(--paper);
+    border-radius: 6px;
+    overflow: hidden;
+    transform: scale(0.97);
+    transition: transform 0.32s ease;
+    box-shadow: 0 40px 120px rgba(0,0,0,0.55);
+  }
+  .doc-lb.open .doc-lb__panel { transform: scale(1); }
+  .doc-lb__bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: none;
+    padding: 14px clamp(16px, 3vw, 28px);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+  .doc-lb__title {
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.01em;
+    color: var(--ink);
+    margin-right: auto;
+  }
+  .doc-lb__dl {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 16px;
+    border-radius: 999px;
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.2s ease;
+  }
+  .doc-lb__dl:hover { background: var(--steel); }
+  .doc-lb__close {
+    width: 38px;
+    height: 38px;
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.18);
+    background: transparent;
+    color: var(--ink);
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+  .doc-lb__close:hover { background: rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.4); }
+  .doc-lb__body {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    background: #f3f1ec;
+  }
+  .doc-lb__body iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+  .doc-lb__body img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  @media (max-width: 600px) {
+    .doc-lb__panel { max-height: 94vh; }
+    .doc-lb__title { font-size: 13px; }
+    .doc-lb__dl { padding: 8px 13px; font-size: 12px; }
+  }
+
   /* ---- Testimonial ticker ---- */
   .ticker {
     background: var(--ink);
@@ -1056,8 +1157,8 @@
           <h2>Tomorrow, Built in</h2>
           <p class="body muted">Every Tomorrow Home comes future-ready as standard. EV ready garages, energy efficiency and smart-home fundamentals are included from the outset, because a home built today should still make practical and financial sense tomorrow.</p>
           <div class="btn-row">
-            <a class="btn btn--solid" href="#">View our smart features</a>
-            <a class="btn btn--outline" href="#">Turnkey inclusions</a>
+            <a class="btn btn--solid" href="smart-features.pdf" target="_blank" rel="noopener" data-doc-modal data-doc-type="pdf" data-doc-title="Smart features">View our smart features</a>
+            <a class="btn btn--outline" href="turnkey-inclusions.png" target="_blank" rel="noopener" data-doc-modal data-doc-type="image" data-doc-title="Turnkey inclusions">Turnkey inclusions</a>
           </div>
         </div>
       </div>
@@ -1216,6 +1317,20 @@
     </div>
   </div>
 
+  <div class="doc-lb" id="docModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="docModalTitle">
+    <div class="doc-lb__panel">
+      <header class="doc-lb__bar">
+        <span class="doc-lb__title" id="docModalTitle"></span>
+        <a class="doc-lb__dl" id="docModalDownload" download>
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1v9m0 0L4.5 6.5M8 10l3.5-3.5M2 13.5h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Download
+        </a>
+        <button class="doc-lb__close" id="docModalClose" aria-label="Close">&times;</button>
+      </header>
+      <div class="doc-lb__body" id="docModalBody"></div>
+    </div>
+  </div>
+
   <script>
     // Seamless ticker: clone the group so the -50% loop is gapless
     (function () {
@@ -1272,6 +1387,50 @@
       closeBtn.addEventListener('click', close);
       lb.addEventListener('click', (e) => { if (e.target === lb) close(); });
       document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && lb.classList.contains('open')) close(); });
+    })();
+
+    // Document modal — scrollable PDF / image with a download button
+    (function () {
+      const modal = document.getElementById('docModal');
+      const body = document.getElementById('docModalBody');
+      const title = document.getElementById('docModalTitle');
+      const dl = document.getElementById('docModalDownload');
+      const closeBtn = document.getElementById('docModalClose');
+      if (!modal || !body) return;
+      let lastFocus = null;
+
+      function open(src, type, label) {
+        lastFocus = document.activeElement;
+        title.textContent = label || '';
+        dl.href = src;
+        dl.setAttribute('download', '');
+        if (type === 'image') {
+          body.innerHTML = '<img src="' + src + '" alt="' + (label || '') + '" />';
+        } else {
+          body.innerHTML = '<iframe src="' + src + '#toolbar=0&navpanes=0" title="' + (label || 'Document') + '"></iframe>';
+        }
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        closeBtn.focus();
+      }
+      function close() {
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        setTimeout(() => { body.innerHTML = ''; }, 340);
+        if (lastFocus) lastFocus.focus();
+      }
+
+      document.querySelectorAll('[data-doc-modal]').forEach((el) => {
+        el.addEventListener('click', (e) => {
+          e.preventDefault();
+          open(el.getAttribute('href'), el.getAttribute('data-doc-type'), el.getAttribute('data-doc-title'));
+        });
+      });
+      closeBtn.addEventListener('click', close);
+      modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('open')) close(); });
     })();
   </script>
   <script src="landing-intro.js"></script>
