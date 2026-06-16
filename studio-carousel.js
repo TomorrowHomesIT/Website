@@ -43,6 +43,7 @@
     var frontLayer = layers[front];
     var fImg = back.querySelector('img');
     fImg.src = slides[i].src;
+    fImg.alt = slides[i].title + ' facade design — Studio Tomorrow, Victoria';
 
     // Snap incoming off-screen with no transition
     back.style.transition = 'none';
