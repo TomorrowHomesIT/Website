@@ -2,22 +2,19 @@
 (function () {
   var R = window.__resources || {};
   var slides = [
-    { src: R.facadeBrae       || 'facade-brae.jpg',       title: 'Brae' },
-    { src: R.facadeVaucluse   || 'facade-vaucluse.jpg',   title: 'Vaucluse' },
-    { src: R.facadeMainridge  || 'facade-mainridge.jpg',  title: 'Mainridge' },
-    { src: R.facadeMosman     || 'facade-mosman.jpg',     title: 'Mosman' },
-    { src: R.facadeHamilton   || 'facade-hamilton.jpg',   title: 'Hamilton' },
-    { src: R.facadeToorak     || 'facade-toorak.jpg',     title: 'Toorak' },
-    { src: R.facadePortsea    || 'facade-portsea.jpg',    title: 'Portsea' },
-    { src: R.facadeBellevue   || 'facade-bellevue.jpg',   title: 'Bellevue' },
-    { src: R.facadeTenerife   || 'facade-tenerife.jpg',   title: 'Tenerife' },
-    { src: R.facadeCentennial || 'facade-centennial.jpg', title: 'Centennial' },
-    { src: R.facadeArmadale   || 'facade-armadale.jpg',   title: 'Armadale' },
-    { src: R.facadeBalwyn     || 'facade-balwyn.jpg',     title: 'Balwyn' },
-    { src: R.facadeBrighton   || 'facade-brighton.jpg',   title: 'Brighton' },
-    { src: R.facadeFloreat    || 'facade-floreat.jpg',    title: 'Floreat' },
-    { src: R.facadePiper      || 'facade-piper.jpg',      title: 'Piper' },
-    { src: R.facadeClaremont  || 'facade-claremont.jpg',  title: 'Claremont' }
+    { src: R.facadeBrae        || 'facade-brae.jpg',        title: 'Brae' },
+    { src: R.facadeVaucluse    || 'facade-vaucluse.jpg',    title: 'Vaucluse' },
+    { src: R.facadeHamilton    || 'facade-hamilton.jpg',    title: 'Hamilton' },
+    { src: R.facadeToorak      || 'facade-toorak.jpg',      title: 'Toorak' },
+    { src: R.facadePortsea     || 'facade-portsea.jpg',     title: 'Portsea' },
+    { src: R.facadeBellevue    || 'facade-bellevue.jpg',    title: 'Bellevue' },
+    { src: R.facadeTenerife    || 'facade-tenerife.jpg',    title: 'Tenerife' },
+    { src: R.facadeArmadale    || 'facade-armadale.jpg',    title: 'Armadale' },
+    { src: R.facadeBalwyn      || 'facade-balwyn.jpg',      title: 'Balwyn' },
+    { src: R.facadeCanterbury  || 'facade-canterbury.jpg',  title: 'Canterbury' },
+    { src: R.facadeBrighton    || 'facade-brighton.jpg',    title: 'Brighton' },
+    { src: R.facadeFloreat     || 'facade-floreat.jpg',     title: 'Floreat' },
+    { src: R.facadeClaremont   || 'facade-claremont.jpg',   title: 'Claremont' }
   ];
   var N = slides.length;
 
