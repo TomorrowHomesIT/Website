@@ -478,7 +478,14 @@
     padding: 16px 0;
     border-bottom: 1px solid rgba(245,243,240,0.16);
   }
-  .mnav__cta { align-self: flex-start; margin-top: clamp(28px, 6vw, 48px); }
+  .mnav__cta {
+    align-self: flex-start;
+    margin-top: clamp(28px, 6vw, 48px);
+    background: var(--paper);
+    color: var(--ink);
+    border-color: var(--paper);
+  }
+  .mnav__cta:hover { background: var(--steel); color: var(--paper); border-color: var(--steel); }
 
   /* Intro mode: nav stays hidden until the wordmark docks (JS-driven). */
   html.js-intro .nav { opacity: 0; pointer-events: none; }
