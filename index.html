@@ -423,6 +423,63 @@
   .nav.theme-dark .nav__cta { color: var(--ink); background: var(--paper); }
   .nav__cta:hover { background: var(--steel); color: var(--paper); }
 
+  /* ---- mobile burger + menu panel ---- */
+  .nav__burger {
+    display: none;
+    position: relative;
+    flex: none;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    color: var(--ink);
+  }
+  .nav.theme-dark .nav__burger { color: var(--paper); }
+  .nav__burger span {
+    position: absolute;
+    left: 5px;
+    right: 5px;
+    height: 1.5px;
+    background: currentColor;
+    transition: transform .32s ease, opacity .32s ease, top .32s ease;
+  }
+  .nav__burger span:nth-child(1) { top: 12px; }
+  .nav__burger span:nth-child(2) { top: 20px; }
+  .nav__burger.is-open span:nth-child(1) { top: 16px; transform: rotate(45deg); }
+  .nav__burger.is-open span:nth-child(2) { top: 16px; transform: rotate(-45deg); }
+
+  .mnav {
+    position: fixed;
+    top: var(--nav-h);
+    left: 0; right: 0; bottom: 0;
+    z-index: 90;
+    background: var(--ink);
+    color: var(--paper);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: clamp(20px, 5vw, 48px) var(--pad) clamp(36px, 7vw, 60px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-10px);
+    transition: opacity .35s ease, transform .35s ease, visibility .35s ease;
+  }
+  .mnav.is-open { opacity: 1; visibility: visible; pointer-events: auto; transform: none; }
+  .mnav__links { display: flex; flex-direction: column; }
+  .mnav__links a {
+    font-family: var(--serif);
+    font-size: clamp(28px, 9vw, 42px);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(245,243,240,0.16);
+  }
+  .mnav__cta { align-self: flex-start; margin-top: clamp(28px, 6vw, 48px); }
+
   /* Intro mode: nav stays hidden until the wordmark docks (JS-driven). */
   html.js-intro .nav { opacity: 0; pointer-events: none; }
 
@@ -1086,11 +1143,16 @@
     .fc-expand { opacity: 1; }
   }
   @media (max-width: 720px) {
-    .nav__links { display: none; }
+    .nav__logo { width: 150px; }
+    .nav__links, .nav__cta { display: none; }
+    .nav__burger { display: flex; }
     .dev__grid { grid-template-columns: 1fr; }
     .footer__legal .copy { margin-left: 0; width: 100%; }
     .hero__manifesto { font-size: clamp(34px, 9.5vw, 60px); }
     .hero__line { white-space: normal; }
+  }
+  @media (max-width: 480px) {
+    :root { --nav-h: 78px; }
   }
 </style>
 <script>(function(){try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('js-intro');}}catch(e){}})();</script>
@@ -1112,8 +1174,21 @@
         <a href="#developments">Developments</a>
       </nav>
       <a class="nav__cta" href="https://buildertrend.net/" target="_blank" rel="noopener">CLIENT PORTAL</a>
+      <button class="nav__burger" id="navBurger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">
+        <span></span><span></span>
+      </button>
     </div>
   </header>
+
+  <div class="mnav" id="mobileNav" aria-hidden="true">
+    <nav class="mnav__links">
+      <a href="#about">About</a>
+      <a href="#the-build">The Build</a>
+      <a href="#the-studio">The Studio</a>
+      <a href="#developments">Developments</a>
+    </nav>
+    <a class="mnav__cta btn btn--solid" href="https://buildertrend.net/" target="_blank" rel="noopener">Client Portal</a>
+  </div>
 
   <!-- ============ SECTION 0 — SCROLL SPLASH ============ -->
   <section class="s0" data-theme="dark" aria-label="Tomorrow Homes">
@@ -1481,6 +1556,31 @@
         });
       }, { threshold: 0.3 });
       logoIo.observe(logo);
+    })();
+
+    // Mobile nav menu
+    (function () {
+      const burger = document.getElementById('navBurger');
+      const menu = document.getElementById('mobileNav');
+      if (!burger || !menu) return;
+
+      function setOpen(open) {
+        burger.classList.toggle('is-open', open);
+        burger.setAttribute('aria-expanded', String(open));
+        burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        menu.classList.toggle('is-open', open);
+        menu.setAttribute('aria-hidden', String(!open));
+        document.body.style.overflow = open ? 'hidden' : '';
+      }
+
+      burger.addEventListener('click', () => setOpen(!menu.classList.contains('is-open')));
+      menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && menu.classList.contains('is-open')) setOpen(false);
+      });
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 720 && menu.classList.contains('is-open')) setOpen(false);
+      });
     })();
 
     // Video lightbox — play YouTube on click
