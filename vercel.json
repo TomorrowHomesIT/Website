@@ -20,6 +20,13 @@
     { "source": "/testimonials", "destination": "/", "permanent": true },
     { "source": "/privacy-policy", "destination": "/", "permanent": true },
     { "source": "/terms-and-conditions", "destination": "/", "permanent": true },
-    { "source": "/thank-you", "destination": "/", "permanent": true }
+    { "source": "/thank-you", "destination": "/", "permanent": true },
+
+    { "source": "/downloads/development-brochures/FLORA_BROCHURE_FA_WEB.pdf", "destination": "/FLORA_BROCHURE_FA_WEB.pdf", "permanent": true },
+    { "source": "/downloads/development-brochures/COAST_BROCHURE_FA_WEB.pdf", "destination": "/COAST_BROCHURE_FA_WEB.pdf", "permanent": true },
+    { "source": "/downloads/development-brochures/NEWPORT_BROCHURE_FA_WEB.pdf", "destination": "/NEWPORT_BROCHURE_FA_WEB.pdf", "permanent": true },
+    { "source": "/downloads/development-brochures/WOOLSTORES_BROCHURE_FA_WEB.pdf", "destination": "/WOOLSTORES_BROCHURE_FA_WEB.pdf", "permanent": true },
+
+    { "source": "/downloads/:path*", "destination": "/#developments", "permanent": true }
   ]
 }
