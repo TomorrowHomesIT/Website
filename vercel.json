@@ -1,4 +1,25 @@
 {
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/we-are-tomorrow", "destination": "/#about", "permanent": true },
+
+    { "source": "/home-technology-today", "destination": "/#the-build", "permanent": true },
+    { "source": "/turnkey-inclusions", "destination": "/#the-build", "permanent": true },
+
+    { "source": "/studio-tomorrow", "destination": "/#the-studio", "permanent": true },
+    { "source": "/beautifully-designed-facades-of-tomorrow", "destination": "/#the-studio", "permanent": true },
+    { "source": "/interior-colour-design-selection", "destination": "/#the-studio", "permanent": true },
+    { "source": "/interior-colour-design-selection/:slug*", "destination": "/#the-studio", "permanent": true },
+
+    { "source": "/flora", "destination": "/#developments", "permanent": true },
+    { "source": "/coast", "destination": "/#developments", "permanent": true },
+    { "source": "/newport", "destination": "/#developments", "permanent": true },
+    { "source": "/woolstores", "destination": "/#developments", "permanent": true },
+
+    { "source": "/testimonials", "destination": "/", "permanent": true },
+    { "source": "/privacy-policy", "destination": "/", "permanent": true },
+    { "source": "/terms-and-conditions", "destination": "/", "permanent": true },
+    { "source": "/thank-you", "destination": "/", "permanent": true }
+  ]
 }
