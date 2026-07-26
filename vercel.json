@@ -28,5 +28,13 @@
     { "source": "/downloads/development-brochures/WOOLSTORES_BROCHURE_FA_WEB.pdf", "destination": "/WOOLSTORES_BROCHURE_FA_WEB.pdf", "permanent": true },
 
     { "source": "/downloads/:path*", "destination": "/#developments", "permanent": true }
+  ],
+  "headers": [
+    {
+      "source": "/(.*).pdf",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex" }
+      ]
+    }
   ]
 }
